@@ -1,0 +1,17 @@
+:root {
+    --logo-font-family: "Impact", Helvetica;
+    --logo-font-weight: 400;
+    --logo-font-size: 96px;
+    --logo-letter-spacing: 0px;
+    --logo-line-height: normal;
+    --logo-font-style: normal;
+    --collection-1-main: rgba(18, 155, 13, 1);
+    --collection-1-secondary: rgba(252, 68, 15, 1);
+    --collection-1-backmain: rgba(231, 220, 214, 1);
+    --collection-1-backmain-2: rgba(174, 194, 172, 1);
+    --collection-1-white: rgba(252, 252, 252, 1);
+    --collection-1-dark: rgba(21, 135, 35, 1);
+    --collection-1-xxdark: rgba(10, 50, 27, 1);
+    --collection-1-bottom: rgba(10, 50, 27, 0.85);
+  }
+  
