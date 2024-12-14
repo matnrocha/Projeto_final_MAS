@@ -1,0 +1,9 @@
+.step {
+    margin: 30px 0;
+}
+
+.step img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+}

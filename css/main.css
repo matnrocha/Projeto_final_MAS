@@ -15,8 +15,10 @@ body {
     min-height: 100vh;
     background-color: var(--color-primary);
     color: var(--color-text);
+    min-height: 100vh;
 }
 
 main {
+    flex: 1;
     margin: 7em 0;
 }
