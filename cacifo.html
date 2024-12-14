@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cacifos - Est'Aki</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         body {
             background-color: #f8f9fa;
@@ -83,6 +84,11 @@
             border-radius: 8px;
         }
 
+        .cacifos-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
         .footer {
             background-color: #212529;
             color: white;
@@ -106,7 +112,7 @@
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item"><a class="nav-link" href="cacifo.html">Cacifos</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Encomendas</a></li>
-                    <li class="nav-item"><a class="nav-link" href="usar.html">Como Utilizar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Como Utilizar</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Empresas</a></li>
                 </ul>
                 <ul class="navbar-nav ms-auto">
@@ -123,11 +129,11 @@
         <button class="btn btn-success">Levantamento</button>
     </div>
 
-    <!-- Seletor de Cidade e Tamanho -->
+    <!-- Seletor de Cidade -->
     <div class="container">
         <div class="row mt-4 align-items-end">
             <!-- Escolha da Cidade -->
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <label for="cidade" class="form-label">Cidade</label>
                 <select id="cidade" class="form-select">
                     <option value="Lisboa">Lisboa</option>
@@ -137,22 +143,25 @@
                 </select>
                 <button class="btn btn-success mt-2" id="btn-pesquisar">Pesquisar</button>
             </div>
-
-            <!-- Escolha do Tamanho -->
-            <div class="col-md-6 text-end">
-                <h5>Escolha o Tamanho da Encomenda</h5>
-                <button class="btn btn-outline-success btn-tamanho me-2" id="tamanho-pequeno">Pequena</button>
-                <button class="btn btn-outline-success btn-tamanho" id="tamanho-medio">Média</button>
-            </div>
         </div>
     </div>
 
-    <!-- Mapa -->
-    <div class="container map-container mt-4">
-        <h3>Localização de Cacifos</h3>
-        <div class="map" id="mapa">
-            <!-- O mapa será renderizado aqui -->
-            <p class="text-center mt-5">Selecione uma cidade para ver os cacifos disponíveis.</p>
+    <!-- Conteúdo Principal -->
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Lista de Cacifos -->
+            <div class="col-md-4">
+                <h4>Localização dos Cacifos</h4>
+                <div class="cacifos-list" id="cacifos-list">
+                    <!-- A lista será preenchida dinamicamente -->
+                </div>
+            </div>
+
+            <!-- Mapa -->
+            <div class="col-md-8">
+                <h3>Mapa</h3>
+                <div id="mapa" class="map"></div>
+            </div>
         </div>
     </div>
 
@@ -161,24 +170,74 @@
         <p>© 2024 Est'Aki. Todos os direitos reservados.</p>
     </footer>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Script do Mapa -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        document.getElementById('btn-pesquisar').addEventListener('click', function() {
+        // Coordenadas das cidades e dos cacifos
+        const cities = {
+            Lisboa: { coords: [38.736946, -9.142685], cacifos: [
+                { nome: "Lisboa Centro", coords: [38.736946, -9.142685] },
+                { nome: "Lisboa Norte", coords: [38.750, -9.140] },
+                { nome: "Lisboa Oeste", coords: [38.730, -9.180] }
+            ] },
+            Porto: { coords: [41.157944, -8.629105], cacifos: [
+                { nome: "Porto Baixa", coords: [41.157944, -8.629105] },
+                { nome: "Porto Matosinhos", coords: [41.181, -8.689] },
+                { nome: "Porto Gaia", coords: [41.134, -8.612] }
+            ] },
+            Coimbra: { coords: [40.211491, -8.429184], cacifos: [
+                { nome: "Coimbra Centro", coords: [40.211491, -8.429184] },
+                { nome: "Coimbra Norte", coords: [40.222, -8.430] },
+                { nome: "Coimbra Sul", coords: [40.200, -8.420] }
+            ] },
+            Faro: { coords: [37.017963, -7.930833], cacifos: [
+                { nome: "Faro Aeroporto", coords: [37.017963, -7.930833] },
+                { nome: "Faro Centro", coords: [37.030, -7.928] },
+                { nome: "Faro Praia", coords: [37.010, -7.940] }
+            ] }
+        };
+
+        const map = L.map('mapa').setView(cities.Lisboa.coords, 12);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        const markers = {};
+
+        // Atualiza os cacifos e o mapa
+        const updateCacifos = (cidade) => {
+            const cacifosList = document.getElementById('cacifos-list');
+            cacifosList.innerHTML = '';
+
+            cities[cidade].cacifos.forEach(cacifo => {
+                // Adicionar à lista
+                const cacifoItem = document.createElement('div');
+                cacifoItem.className = 'mb-2 p-2 border rounded bg-light';
+                cacifoItem.innerHTML = `
+                    <strong>${cacifo.nome}</strong><br>
+                    <button class="btn btn-sm btn-success mt-2" onclick="alert('Cacifo reservado em ${cacifo.nome}')">Reservar</button>
+                `;
+                cacifosList.appendChild(cacifoItem);
+
+                // Adicionar ao mapa
+                if (!markers[cacifo.nome]) {
+                    markers[cacifo.nome] = L.marker(cacifo.coords).addTo(map).bindPopup(`${cacifo.nome}`);
+                }
+            });
+
+            // Atualizar a visão do mapa
+            map.setView(cities[cidade].coords, 13);
+        };
+
+        // Evento para atualizar os cacifos ao escolher uma cidade
+        document.getElementById('btn-pesquisar').addEventListener('click', () => {
             const cidade = document.getElementById('cidade').value;
-            const mapa = document.getElementById('mapa');
-            
-            mapa.innerHTML = `
-                <h4 class="text-center mt-4">${cidade}</h4>
-                <ul class="list-group mt-3">
-                    <li class="list-group-item">Cacifo 1 - ${cidade} Centro</li>
-                    <li class="list-group-item">Cacifo 2 - ${cidade} Norte</li>
-                    <li class="list-group-item">Cacifo 3 - ${cidade} Sul</li>
-                </ul>
-            `;
+            updateCacifos(cidade);
         });
+
+        // Inicializar com Lisboa
+        updateCacifos('Lisboa');
     </script>
 </body>
 </html>
-
