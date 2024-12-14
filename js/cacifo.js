@@ -41,6 +41,7 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 
 const markers = {};
 
+// Atualiza cacifos no mapa e na lista
 const updateCacifos = (cidade) => {
     const cacifosList = document.getElementById("cacifos-list");
     cacifosList.innerHTML = ""; // Limpa a lista de cacifos
@@ -67,6 +68,7 @@ const updateCacifos = (cidade) => {
     map.setView(cities[cidade].coords, 13);
 };
 
+// Reservar cacifo
 const reservarCacifo = (nomeCacifo) => {
     const modal = new bootstrap.Modal(document.getElementById("modalEscolha"));
     modal.show();
@@ -87,6 +89,17 @@ document.getElementById("novaEncomenda").addEventListener("click", () => {
 document.getElementById("confirmarEncomenda").addEventListener("click", () => {
     const tamanho = document.getElementById("tamanhoEncomenda").value;
     const codigo = Math.random().toString(36).substring(2, 10).toUpperCase();
+    const novaEncomenda = {
+        codigo: codigo,
+        data: new Date().toLocaleDateString(),
+        estado: "Reservado",
+        detalhes: `Tamanho: ${tamanho}`,
+    };
+
+    const encomendas = JSON.parse(sessionStorage.getItem("encomendas")) || [];
+    encomendas.push(novaEncomenda);
+    sessionStorage.setItem("encomendas", JSON.stringify(encomendas));
+
     alert(`Reserva feita com sucesso!\nTamanho: ${tamanho}\nCódigo: ${codigo}`);
     bootstrap.Modal.getInstance(document.getElementById("modalEscolha")).hide();
 });
@@ -98,17 +111,31 @@ document.getElementById("levantamento").addEventListener("click", () => {
     document.getElementById("acao-levantamento").classList.remove("d-none");
 });
 
-// Validação de Levantamento
+// Validação de Levantamento (Cria Encomenda a Partir do Código)
 document.getElementById("confirmarLevantamento").addEventListener("click", () => {
     const codigo = document.getElementById("codigoLevantamentoInput").value.trim();
+
     if (codigo) {
+        const novaEncomenda = {
+            codigo: codigo,
+            data: new Date().toLocaleDateString(),
+            estado: "Levantado",
+            detalhes: "Código inserido manualmente.",
+        };
+
+        const encomendas = JSON.parse(sessionStorage.getItem("encomendas")) || [];
+        encomendas.push(novaEncomenda);
+        sessionStorage.setItem("encomendas", JSON.stringify(encomendas));
+
         alert(`Código ${codigo} validado! Levantamento concluído.`);
-        bootstrap.Modal.getInstance(document.getElementById("modalEscolha")).hide();
     } else {
         alert("Por favor, insira um código válido!");
     }
+
+    bootstrap.Modal.getInstance(document.getElementById("modalEscolha")).hide();
 });
 
+// Pesquisa inicial em Lisboa
 document.getElementById("btn-pesquisar").addEventListener("click", () => {
     const cidade = document.getElementById("cidade").value;
     updateCacifos(cidade);
