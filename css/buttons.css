@@ -1,0 +1,11 @@
+.btn-actions {
+    margin: 30px 0;
+    text-align: center;
+}
+
+.btn-actions .btn {
+    min-width: 150px; /* Largura mínima */
+    margin: 0 10px; /* Espaçamento entre os botões */
+    font-size: 1rem; /* Tamanho do texto */
+    padding: 10px 20px; /* Ajuste do padding */
+}
