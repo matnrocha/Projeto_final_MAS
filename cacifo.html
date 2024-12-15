@@ -22,37 +22,39 @@
     <!-- Navbar --> 
     <div id="navbar"></div>
     <main>
-        <!-- Seletor de Cidade-->
-        <div class="container">
-            <div class="row mt-4 align-items-end">
-                <div class="col-md-6">
-                    <label for="cidade" class="form-label">Cidade</label>
-                    <select id="cidade" class="form-select">
-                        <option value="Lisboa">Lisboa</option>
-                        <option value="Porto">Porto</option>
-                        <option value="Coimbra">Coimbra</option>
-                        <option value="Faro">Faro</option>
-                    </select>
-                    <button class="btn btn-success mt-2" id="btn-pesquisar">Pesquisar</button>
-                </div>
+        <!-- Seletor de Cidade -->
+    <div class="container">
+        <div class="row mt-4 align-items-end">
+            <div class="col-md-12">
+                <label for="cidade" class="form-label">Cidade</label>
+                <select id="cidade" class="form-select">
+                    <option value="Lisboa">Lisboa</option>
+                    <option value="Porto">Porto</option>
+                    <option value="Coimbra">Coimbra</option>
+                    <option value="Faro">Faro</option>
+                </select>
+                <button class="btn btn-success mt-2" id="btn-pesquisar">Pesquisar</button>
             </div>
         </div>
-        <!-- Conteúdo Principal -->
-        <div class="container mt-4">
-            <div class="row">
-                <div class="col-md-4">
-                    <h4>Localização dos Cacifos</h4>
-                    <div class="cacifos-list" id="cacifos-list">
-                        <!-- A lista será preenchida dinamicamente -->
-                    </div>
-                </div> 
-                <div class="col-md-8">
-                    <h3>Mapa</h3>
-                    <div id="mapa" class="map"></div>
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-4">
+                <h4>Localização dos Cacifos</h4>
+                <div class="cacifos-list" id="cacifos-list">
+                    <!-- A lista será preenchida dinamicamente -->
                 </div>
             </div>
-        </div> 
-        <!-- Modal para Escolha de Ação -->
+            <div class="col-md-8">
+                <h3>Mapa</h3>
+                <div id="mapa" class="map"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Escolha de Ação -->
     <div class="modal fade" id="modalEscolha" tabindex="-1" aria-labelledby="modalEscolhaLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">

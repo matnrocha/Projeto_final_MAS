@@ -76,6 +76,30 @@ const reservarCacifo = (nomeCacifo) => {
     document.getElementById("acao-principal").classList.remove("d-none");
     document.getElementById("acao-encomenda").classList.add("d-none");
     document.getElementById("acao-levantamento").classList.add("d-none");
+
+    // Remove event listener antes de adicionar para evitar duplicatas
+    const confirmarBtn = document.getElementById("confirmarEncomenda");
+    const novoConfirmarBtn = confirmarBtn.cloneNode(true); // Clona o botão para limpar todos os listeners antigos
+    confirmarBtn.replaceWith(novoConfirmarBtn);
+
+    novoConfirmarBtn.addEventListener("click", () => {
+        const tamanho = document.getElementById("tamanhoEncomenda").value;
+        const codigo = Math.random().toString(36).substring(2, 10).toUpperCase();
+        const novaEncomenda = {
+            codigo: codigo,
+            data: new Date().toLocaleDateString(),
+            estado: "Reservado",
+            detalhes: `Tamanho: ${tamanho}`,
+            cacifo: nomeCacifo, // Adiciona o nome do cacifo à encomenda
+        };
+
+        const encomendas = JSON.parse(sessionStorage.getItem("encomendas")) || [];
+        encomendas.push(novaEncomenda);
+        sessionStorage.setItem("encomendas", JSON.stringify(encomendas));
+
+        alert(`Reserva feita com sucesso!\nCacifo: ${nomeCacifo}\nTamanho: ${tamanho}\nCódigo: ${codigo}`);
+        bootstrap.Modal.getInstance(document.getElementById("modalEscolha")).hide();
+    });
 };
 
 // Ação de Nova Encomenda
@@ -83,56 +107,6 @@ document.getElementById("novaEncomenda").addEventListener("click", () => {
     document.getElementById("acao-principal").classList.add("d-none");
     document.getElementById("acao-encomenda").classList.remove("d-none");
     document.getElementById("acao-levantamento").classList.add("d-none");
-});
-
-// Confirmação de Nova Encomenda
-document.getElementById("confirmarEncomenda").addEventListener("click", () => {
-    const tamanho = document.getElementById("tamanhoEncomenda").value;
-    const codigo = Math.random().toString(36).substring(2, 10).toUpperCase();
-    const novaEncomenda = {
-        codigo: codigo,
-        data: new Date().toLocaleDateString(),
-        estado: "Reservado",
-        detalhes: `Tamanho: ${tamanho}`,
-    };
-
-    const encomendas = JSON.parse(sessionStorage.getItem("encomendas")) || [];
-    encomendas.push(novaEncomenda);
-    sessionStorage.setItem("encomendas", JSON.stringify(encomendas));
-
-    alert(`Reserva feita com sucesso!\nTamanho: ${tamanho}\nCódigo: ${codigo}`);
-    bootstrap.Modal.getInstance(document.getElementById("modalEscolha")).hide();
-});
-
-// Ação de Levantamento
-document.getElementById("levantamento").addEventListener("click", () => {
-    document.getElementById("acao-principal").classList.add("d-none");
-    document.getElementById("acao-encomenda").classList.add("d-none");
-    document.getElementById("acao-levantamento").classList.remove("d-none");
-});
-
-// Validação de Levantamento (Cria Encomenda a Partir do Código)
-document.getElementById("confirmarLevantamento").addEventListener("click", () => {
-    const codigo = document.getElementById("codigoLevantamentoInput").value.trim();
-
-    if (codigo) {
-        const novaEncomenda = {
-            codigo: codigo,
-            data: new Date().toLocaleDateString(),
-            estado: "Levantado",
-            detalhes: "Código inserido manualmente.",
-        };
-
-        const encomendas = JSON.parse(sessionStorage.getItem("encomendas")) || [];
-        encomendas.push(novaEncomenda);
-        sessionStorage.setItem("encomendas", JSON.stringify(encomendas));
-
-        alert(`Código ${codigo} validado! Levantamento concluído.`);
-    } else {
-        alert("Por favor, insira um código válido!");
-    }
-
-    bootstrap.Modal.getInstance(document.getElementById("modalEscolha")).hide();
 });
 
 // Pesquisa inicial em Lisboa
