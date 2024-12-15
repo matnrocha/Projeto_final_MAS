@@ -15,12 +15,118 @@
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script defer src="js/main.js"></script>
     <script defer src="js/encomenda.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 10px 20px;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+        }
+
+        .encomendas-container {
+            margin: 50px auto;
+            max-width: 900px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .encomenda-item {
+            border-bottom: 1px solid #ddd;
+            padding: 15px 0;
+        }
+
+        .encomenda-item:last-child {
+            border-bottom: none;
+        }
+
+        .progress-container {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin: 20px auto;
+            max-width: 400px;
+            font-weight: bold;
+        }
+
+        .step {
+            text-align: center;
+            flex: 1;
+            color: #adb5bd;
+            position: relative;
+        }
+
+        .step::before {
+            content: '';
+            width: 15px;
+            height: 15px;
+            background-color: #adb5bd;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 10px auto;
+        }
+
+        .step.active {
+            color: #28a745;
+        }
+
+        .step.active::before {
+            background-color: #28a745;
+        }
+
+        .step::after {
+            content: '';
+            position: absolute;
+            top: 7px;
+            left: 50%;
+            height: 2px;
+            width: 100%;
+            background-color: #adb5bd;
+            z-index: -1;
+        }
+
+        .step:last-child::after {
+            display: none;
+        }
+
+        /* Custom button colors */
+        .btn-warning {
+            background-color: #ff8800;
+            border-color: #ff8800;
+            color: #fff;
+        }
+        .btn-warning:hover {
+            background-color: #e67600;
+            border-color: #e67600;
+        }
+
+        .btn-info {
+            background-color: #28a745;
+            border-color: #28a745;
+            color: #fff;
+        }
+        .btn-info:hover {
+            background-color: #218838;
+            border-color: #218838;
+        }
+    </style>
 </head>
 <body>
     <!-- Navbar --> 
     <div id="navbar"></div>
     <main>
-        <!-- Conteúdo da página -->
         <div class="container encomendas-container">
             <h2>Minhas Encomendas</h2>
             <div id="encomendas-list">
@@ -28,6 +134,28 @@
             </div>
         </div>
     
+        <!-- Modal para mostrar o estado -->
+        <div class="modal fade" id="estadoModal" tabindex="-1" aria-labelledby="estadoModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="estadoModalLabel">Estado da Encomenda</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="progress-container">
+                            <div class="step active" id="step-envio">Envio</div>
+                            <div class="step" id="step-transporte">Em Transporte</div>
+                            <div class="step" id="step-entregue">Entregue</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+    </html>
     </main>
     <!-- Footer -->
      <div id="footer"></div>
