@@ -114,6 +114,14 @@ document.getElementById("novaEncomenda").addEventListener("click", () => {
     document.getElementById("acao-levantamento").classList.add("d-none");
 });
 
+//Ação de Levantamento
+$("#levantamento").on("click", function () {
+    $("#acao-principal").addClass("d-none");
+    $("#acao-encomenda").addClass("d-none");
+    $("#acao-levantamento").removeClass("d-none");
+});
+
+
 // Pesquisa inicial em Lisboa
 document.getElementById("btn-pesquisar").addEventListener("click", () => {
     const cidade = document.getElementById("cidade").value;
