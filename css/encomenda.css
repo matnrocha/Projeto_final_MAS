@@ -15,3 +15,8 @@
 .encomenda-item:last-child {
     border-bottom: none;
 }
+
+.countdown-timer {
+    font-weight: bold;
+    font-size: 1.2em;
+}

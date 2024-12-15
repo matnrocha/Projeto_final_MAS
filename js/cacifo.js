@@ -85,12 +85,17 @@ const reservarCacifo = (nomeCacifo) => {
     novoConfirmarBtn.addEventListener("click", () => {
         const tamanho = document.getElementById("tamanhoEncomenda").value;
         const codigo = Math.random().toString(36).substring(2, 10).toUpperCase();
+
+        const data = new Date().toLocaleDateString();
+        const dataExtenso = new Date().toLocaleDateString('pt-PT', { year: 'numeric', month: 'long', day: 'numeric'});
         const novaEncomenda = {
             codigo: codigo,
-            data: new Date().toLocaleDateString(),
+            data: data,
+            dataExtenso: dataExtenso,
             estado: "Reservado",
             detalhes: `Tamanho: ${tamanho}`,
             cacifo: nomeCacifo, // Adiciona o nome do cacifo à encomenda
+            createdAt: new Date().getTime(), // Adiciona o tempo de criação da encomenda
         };
 
         const encomendas = JSON.parse(sessionStorage.getItem("encomendas")) || [];
