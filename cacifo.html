@@ -57,6 +57,36 @@
                 <p class="text-center mt-5">Selecione uma cidade para ver os cacifos disponíveis.</p>
             </div>
         </div>
+        <!-- Modal para Escolha de Ação -->
+    <div class="modal fade" id="modalEscolha" tabindex="-1" aria-labelledby="modalEscolhaLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalEscolhaLabel">Escolha uma Ação</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="acao-encomenda" class="d-none">
+                        <h6>Escolha o tamanho da encomenda:</h6>
+                        <select id="tamanhoEncomenda" class="form-select mb-3">
+                            <option value="pequeno">Pequeno</option>
+                            <option value="medio">Médio</option>
+                        </select>
+                        <button class="btn btn-success w-100" id="confirmarEncomenda">Confirmar Reserva</button>
+                    </div>
+                    <div id="acao-levantamento" class="d-none">
+                        <h6>Insira o código da encomenda:</h6>
+                        <input type="text" id="codigoLevantamentoInput" class="form-control mb-3" placeholder="Código da Encomenda">
+                        <button class="btn btn-primary w-100" id="confirmarLevantamento">Validar Código</button>
+                    </div>
+                    <div id="acao-principal">
+                        <button class="btn btn-success w-100 mb-3" id="novaEncomenda">Nova Encomenda</button>
+                        <button class="btn btn-primary w-100" id="levantamento">Levantamento</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     </main>
     <!-- Footer -->
     <div id="footer"></div>
