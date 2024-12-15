@@ -106,6 +106,26 @@ const reservarCacifo = (nomeCacifo) => {
         bootstrap.Modal.getInstance(document.getElementById("modalEscolha")).hide();
     });
 };
+//levantamento
+document.getElementById("confirmarLevantamento").addEventListener("click", () => {
+    const codigoInserido = document.getElementById("codigoLevantamentoInput").value.trim();
+    const encomendas = JSON.parse(sessionStorage.getItem("encomendas")) || [];
+
+    const encomendaEncontrada = encomendas.find(encomenda => encomenda.codigo === codigoInserido);
+
+    if (encomendaEncontrada) {
+        alert(`Levantamento realizado com sucesso!\nCacifo: ${encomendaEncontrada.cacifo}\nCódigo: ${encomendaEncontrada.codigo}`);
+        // Atualizar o estado para "Levantado"
+        encomendaEncontrada.estado = "Levantado";
+        sessionStorage.setItem("encomendas", JSON.stringify(encomendas));
+    } else {
+        alert("Código inválido ou encomenda não encontrada!");
+    }
+
+    // Limpa o campo de entrada após a tentativa
+    document.getElementById("codigoLevantamentoInput").value = "";
+});
+
 
 // Ação de Nova Encomenda
 document.getElementById("novaEncomenda").addEventListener("click", () => {
@@ -129,3 +149,19 @@ document.getElementById("btn-pesquisar").addEventListener("click", () => {
 });
 
 updateCacifos("Lisboa");
+
+document.getElementById("levantamento").addEventListener("click", () => {
+    document.getElementById("acao-principal").classList.add("d-none");
+    document.getElementById("acao-encomenda").classList.add("d-none");
+    document.getElementById("acao-levantamento").classList.remove("d-none");
+});
+
+document.getElementById("levantamento").addEventListener("click", () => {
+    document.getElementById("acao-principal").classList.add("d-none");
+    document.getElementById("acao-encomenda").classList.add("d-none");
+    document.getElementById("acao-levantamento").classList.remove("d-none");
+});
+
+
+
+
