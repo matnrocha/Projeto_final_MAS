@@ -1,0 +1,14 @@
+.features-section img {
+    width: 100%; /* Garante que as imagens ocupem toda a largura */
+    height: 150px; /* Altura fixa */
+    object-fit: cover; /* Mantém proporções e corta excesso */
+    border-radius: 8px; /* Bordas arredondadas */
+    border: 2px solid #e0e0e0; /* Borda leve */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transição suave */
+}
+
+.features-section img:hover {
+    transform: scale(1.1); /* Aumenta a imagem em 10% */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Adiciona uma sombra suave */
+    cursor: pointer; /* Altera o cursor para indicar interatividade */
+}
