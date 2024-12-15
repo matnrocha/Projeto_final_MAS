@@ -22,15 +22,9 @@
     <!-- Navbar --> 
     <div id="navbar"></div>
     <main>
-        <!-- Botões principais -->
-        <div class="container btn-actions">
-            <button class="btn btn-success">Nova Encomenda</button>
-            <button class="btn btn-success">Levantamento</button>
-        </div>
-        <!-- Seletor de Cidade e Tamanho -->
+        <!-- Seletor de Cidade-->
         <div class="container">
             <div class="row mt-4 align-items-end">
-                <!-- Escolha da Cidade -->
                 <div class="col-md-6">
                     <label for="cidade" class="form-label">Cidade</label>
                     <select id="cidade" class="form-select">
@@ -41,22 +35,23 @@
                     </select>
                     <button class="btn btn-success mt-2" id="btn-pesquisar">Pesquisar</button>
                 </div>
-                <!-- Escolha do Tamanho -->
-                <div class="col-md-6 text-end">
-                    <h5>Escolha o Tamanho da Encomenda</h5>
-                    <button class="btn btn-outline-success btn-tamanho me-2" id="tamanho-pequeno">Pequena</button>
-                    <button class="btn btn-outline-success btn-tamanho" id="tamanho-medio">Média</button>
+            </div>
+        </div>
+        <!-- Conteúdo Principal -->
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-md-4">
+                    <h4>Localização dos Cacifos</h4>
+                    <div class="cacifos-list" id="cacifos-list">
+                        <!-- A lista será preenchida dinamicamente -->
+                    </div>
+                </div> 
+                <div class="col-md-8">
+                    <h3>Mapa</h3>
+                    <div id="mapa" class="map"></div>
                 </div>
             </div>
-        </div>
-        <!-- Mapa -->
-        <div class="container map-container mt-4">
-            <h3>Localização de Cacifos</h3>
-            <div class="map" id="mapa">
-                <!-- O mapa será renderizado aqui -->
-                <p class="text-center mt-5">Selecione uma cidade para ver os cacifos disponíveis.</p>
-            </div>
-        </div>
+        </div> 
         <!-- Modal para Escolha de Ação -->
     <div class="modal fade" id="modalEscolha" tabindex="-1" aria-labelledby="modalEscolhaLabel" aria-hidden="true">
         <div class="modal-dialog">
