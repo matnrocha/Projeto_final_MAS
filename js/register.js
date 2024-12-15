@@ -7,8 +7,8 @@ $(document).ready(function () {
         $(this).find('i').toggleClass('bi-eye bi-eye-slash');
     });
 
-    // Validação do formulário de login
-    $('#loginForm').on('submit', function (e) {
+    // Validação do formulário de registro
+    $('#registerForm').on('submit', function (e) {
         e.preventDefault();
         const email = $('#email').val();
         const password = $('#password').val();
@@ -34,13 +34,17 @@ $(document).ready(function () {
             // Recuperar o dicionário de usuários do localStorage
             const users = JSON.parse(localStorage.getItem('users')) || {};
 
-            // Verificar se o usuário existe e a senha está correta
-            if (users[email] && users[email] === password) {
-                alert('Login bem-sucedido!');
-                // Redirecionar para a página inicial
-                window.location.href = "index.html";
+            // Verificar se o email já está registrado
+            if (users[email]) {
+                alert('Esse email já está registrado.');
             } else {
-                alert('Email ou senha inválidos.');
+                // Adicionar o novo usuário ao dicionário
+                users[email] = password;
+                localStorage.setItem('users', JSON.stringify(users));
+                alert('Usuário registrado com sucesso!');
+
+                // Redirecionar para a página de login
+                window.location.href = "login.html";
             }
         }
     });
