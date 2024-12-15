@@ -15,6 +15,24 @@
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script defer src="js/main.js"></script>
+    <style>
+        /* Efeito de Zoom nas Imagens ao Passar o Mouse */
+.features-section img {
+    width: 100%; /* Garante que as imagens ocupem toda a largura */
+    height: 150px; /* Altura fixa */
+    object-fit: cover; /* Mantém proporções e corta excesso */
+    border-radius: 8px; /* Bordas arredondadas */
+    border: 2px solid #e0e0e0; /* Borda leve */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transição suave */
+}
+
+.features-section img:hover {
+    transform: scale(1.1); /* Aumenta a imagem em 10% */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Adiciona uma sombra suave */
+    cursor: pointer; /* Altera o cursor para indicar interatividade */
+}
+
+    </style>
 </head>
 <body>
     <!-- Navbar -->
@@ -25,6 +43,37 @@
             <h1>Encontre o cacifo mais próximo de si!</h1>
             <p>+ Sustentável | + Rápido | + Fácil</p>
         </div>
+                <!-- Seção de Cartões Informativos -->
+        <section class="features-section py-5">
+            <div class="container">
+                <div class="row text-center">
+                    <!-- Cartão 1 -->
+                    <div class="col-md-3 mb-4">
+                        <img src="images/gallery/telemovel.jpg" alt="Perto" class="img-fluid mb-3 rounded">
+                        <h4 class="fw-bold">Perto de ti</h4>
+                        <p>Escolhe o cacifo mais conveniente para levantares a tua encomenda.</p>
+                    </div>
+                    <!-- Cartão 2 -->
+                    <div class="col-md-3 mb-4">
+                        <img src="images/gallery/ofice.jpg" alt="Horário" class="img-fluid mb-3 rounded">
+                        <h4 class="fw-bold">Horário alargado</h4>
+                        <p>Levanta as tuas encomendas à hora que te for conveniente.</p>
+                    </div>
+                    <!-- Cartão 3 -->
+                    <div class="col-md-3 mb-4">
+                        <img src="images/gallery/usar.jpg" alt="Fácil" class="img-fluid mb-3 rounded">
+                        <h4 class="fw-bold">Fácil de usar</h4>
+                        <p>Recebe um PIN por SMS ou e-mail e levanta facilmente.</p>
+                    </div>
+                    <!-- Cartão 4 -->
+                    <div class="col-md-3 mb-4">
+                        <img src="images/gallery/sust.jpg" alt="Sustentável" class="img-fluid mb-3 rounded">
+                        <h4 class="fw-bold">Mais Sustentável</h4>
+                        <p>Reduz as emissões de CO2 com menos deslocações dos transportadores.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 </body>
 </html>
