@@ -109,15 +109,32 @@ const reservarCacifo = (nomeCacifo) => {
 //levantamento
 document.getElementById("confirmarLevantamento").addEventListener("click", () => {
     const codigoInserido = document.getElementById("codigoLevantamentoInput").value.trim();
-    const encomendas = JSON.parse(sessionStorage.getItem("encomendas")) || [];
+    let encomendas = JSON.parse(sessionStorage.getItem("encomendas")) || [];
 
-    const encomendaEncontrada = encomendas.find(encomenda => encomenda.codigo === codigoInserido);
+    let encomendaEncontrada = encomendas.find(encomenda => encomenda.codigo === codigoInserido);
 
     if (encomendaEncontrada) {
         alert(`Levantamento realizado com sucesso!\nCacifo: ${encomendaEncontrada.cacifo}\nCódigo: ${encomendaEncontrada.codigo}`);
         // Atualizar o estado para "Levantado"
         encomendaEncontrada.estado = "Levantado";
         sessionStorage.setItem("encomendas", JSON.stringify(encomendas));
+    } else if (codigoInserido === "1234") {
+        // Cria uma encomenda fictícia para o código "1234"
+        const novaEncomenda = {
+            codigo: "1234",
+            data: new Date().toLocaleDateString(),
+            dataExtenso: new Date().toLocaleDateString('pt-PT', { year: 'numeric', month: 'long', day: 'numeric'}),
+            estado: "Reservado",
+            detalhes: `Tamanho: médio`,
+            cacifo: "Lisboa Centro",
+            createdAt: new Date().getTime(),
+        };
+
+        encomendas.push(novaEncomenda);
+        sessionStorage.setItem("encomendas", JSON.stringify(encomendas));
+
+        alert(`Reserva criada e levantamento realizado com sucesso!\nCacifo: ${novaEncomenda.cacifo}\nCódigo: ${novaEncomenda.codigo}`);
+
     } else {
         alert("Código inválido ou encomenda não encontrada!");
     }
@@ -125,6 +142,7 @@ document.getElementById("confirmarLevantamento").addEventListener("click", () =>
     // Limpa o campo de entrada após a tentativa
     document.getElementById("codigoLevantamentoInput").value = "";
 });
+
 
 
 // Ação de Nova Encomenda
@@ -149,12 +167,6 @@ document.getElementById("btn-pesquisar").addEventListener("click", () => {
 });
 
 updateCacifos("Lisboa");
-
-document.getElementById("levantamento").addEventListener("click", () => {
-    document.getElementById("acao-principal").classList.add("d-none");
-    document.getElementById("acao-encomenda").classList.add("d-none");
-    document.getElementById("acao-levantamento").classList.remove("d-none");
-});
 
 document.getElementById("levantamento").addEventListener("click", () => {
     document.getElementById("acao-principal").classList.add("d-none");
