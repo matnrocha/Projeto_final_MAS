@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
 function atualizarEncomendas() {
     console.log("Atualizando lista de encomendas...");
     const encomendasList = document.getElementById("encomendas-list");
-    const encomendas = JSON.parse(sessionStorage.getItem("encomendas")) || [];
+    const encomendas = JSON.parse(localStorage.getItem("encomendas")) || [];
     const localEncomendas = JSON.parse(localStorage.getItem("encomendas")) || [];
 
     // Limpa a lista antes de renderizar
@@ -18,7 +18,7 @@ function atualizarEncomendas() {
     if (encomendas.length === 0 && localEncomendas.length === 0) {
         encomendasList.innerHTML = "<p>Você não tem nenhuma encomenda no momento.</p>";
     } else {
-        // Combina sessionStorage e localStorage
+        // Combina localStorage e localStorage
         const todasEncomendas = [...localEncomendas, ...encomendas];
 
         todasEncomendas.forEach((encomenda) => {
@@ -77,12 +77,12 @@ function generateCountdownTimer(encomenda) {
     const agora = Date.now();
 
     // Carregar o tempo salvo ou criar um novo
-    const savedEndTime = sessionStorage.getItem(`timer_${encomenda.codigo}`);
+    const savedEndTime = localStorage.getItem(`timer_${encomenda.codigo}`);
     const endTime = savedEndTime ? parseInt(savedEndTime, 10) : agora + 3600000; // Exemplo: 1 hora restante
 
     // Salva o tempo final, caso ainda não tenha sido salvo
     if (!savedEndTime) {
-        sessionStorage.setItem(`timer_${encomenda.codigo}`, endTime);
+        localStorage.setItem(`timer_${encomenda.codigo}`, endTime);
     }
 
     function atualizarTimer() {
@@ -91,7 +91,7 @@ function generateCountdownTimer(encomenda) {
         if (tempoRestante <= 0) {
             timerElement.textContent = "Tempo esgotado!";
             clearInterval(interval);
-            sessionStorage.removeItem(`timer_${encomenda.codigo}`);
+            localStorage.removeItem(`timer_${encomenda.codigo}`);
         } else {
             const horas = Math.floor((tempoRestante / (1000 * 60 * 60)) % 24);
             const minutos = Math.floor((tempoRestante / (1000 * 60)) % 60);
@@ -140,8 +140,8 @@ function alterarLocalizacao(codigoEncomenda) {
         fetch(`http://localhost:5292/api/obterEncomendas`)
             .then(response => response.json())
             .then(updatedEncomendas => {
-                // Obter as encomendas atuais do sessionStorage
-                let encomendas = JSON.parse(sessionStorage.getItem("encomendas")) || [];
+                // Obter as encomendas atuais do localStorage
+                let encomendas = JSON.parse(localStorage.getItem("encomendas")) || [];
 
                 // Verificar se a encomenda já existe
                 const encomendaIndex = encomendas.findIndex(encomenda => encomenda.codigo === codigoEncomenda);
@@ -164,8 +164,8 @@ function alterarLocalizacao(codigoEncomenda) {
                     });
                 }
 
-                // Salvar no sessionStorage e localStorage
-                sessionStorage.setItem("encomendas", JSON.stringify(encomendas));
+                // Salvar no localStorage e localStorage
+                localStorage.setItem("encomendas", JSON.stringify(encomendas));
                 localStorage.setItem("encomendas", JSON.stringify(encomendas));
 
                 // Atualiza a interface

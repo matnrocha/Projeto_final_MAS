@@ -98,9 +98,9 @@ const reservarCacifo = (nomeCacifo) => {
             createdAt: new Date().getTime(), // Adiciona o tempo de criação da encomenda
         };
 
-        const encomendas = JSON.parse(sessionStorage.getItem("encomendas")) || [];
+        const encomendas = JSON.parse(localStorage.getItem("encomendas")) || [];
         encomendas.push(novaEncomenda);
-        sessionStorage.setItem("encomendas", JSON.stringify(encomendas));
+        localStorage.setItem("encomendas", JSON.stringify(encomendas));
 
         alert(`Reserva feita com sucesso!\nCacifo: ${nomeCacifo}\nTamanho: ${tamanho}\nCódigo: ${codigo}`);
         bootstrap.Modal.getInstance(document.getElementById("modalEscolha")).hide();
@@ -109,7 +109,7 @@ const reservarCacifo = (nomeCacifo) => {
 //levantamento
 document.getElementById("confirmarLevantamento").addEventListener("click", () => {
     const codigoInserido = document.getElementById("codigoLevantamentoInput").value.trim();
-    let encomendas = JSON.parse(sessionStorage.getItem("encomendas")) || [];
+    let encomendas = JSON.parse(localStorage.getItem("encomendas")) || [];
 
     let encomendaEncontrada = encomendas.find(encomenda => encomenda.codigo === codigoInserido);
 
@@ -117,7 +117,7 @@ document.getElementById("confirmarLevantamento").addEventListener("click", () =>
         alert(`Levantamento realizado com sucesso!\nCacifo: ${encomendaEncontrada.cacifo}\nCódigo: ${encomendaEncontrada.codigo}`);
         // Atualizar o estado para "Levantado"
         encomendaEncontrada.estado = "Levantado";
-        sessionStorage.setItem("encomendas", JSON.stringify(encomendas));
+        localStorage.setItem("encomendas", JSON.stringify(encomendas));
     } else if (codigoInserido === "1234") {
         // Cria uma encomenda fictícia para o código "1234"
         const novaEncomenda = {
@@ -131,7 +131,7 @@ document.getElementById("confirmarLevantamento").addEventListener("click", () =>
         };
 
         encomendas.push(novaEncomenda);
-        sessionStorage.setItem("encomendas", JSON.stringify(encomendas));
+        localStorage.setItem("encomendas", JSON.stringify(encomendas));
 
         alert(`Reserva criada e levantamento realizado com sucesso!\nCacifo: ${novaEncomenda.cacifo}\nCódigo: ${novaEncomenda.codigo}`);
 
