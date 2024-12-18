@@ -10,18 +10,17 @@ function atualizarEncomendas() {
     console.log("Atualizando lista de encomendas...");
     const encomendasList = document.getElementById("encomendas-list");
     const encomendas = JSON.parse(localStorage.getItem("encomendas")) || [];
-    const localEncomendas = JSON.parse(localStorage.getItem("encomendas")) || [];
+
+    // Ordena as encomendas por data de criação (createdAt)
+    encomendas.sort((a, b) => a.createdAt - b.createdAt);
 
     // Limpa a lista antes de renderizar
     encomendasList.innerHTML = "";
 
-    if (encomendas.length === 0 && localEncomendas.length === 0) {
+    if (encomendas.length === 0) {
         encomendasList.innerHTML = "<p>Você não tem nenhuma encomenda no momento.</p>";
     } else {
-        // Combina localStorage e localStorage
-        const todasEncomendas = [...localEncomendas, ...encomendas];
-
-        todasEncomendas.forEach((encomenda) => {
+        encomendas.forEach((encomenda) => {
             const encomendaDiv = document.createElement("div");
             encomendaDiv.className = "encomenda-item";
 
@@ -151,6 +150,7 @@ function alterarLocalizacao(codigoEncomenda) {
                     // Atualizar a encomenda existente
                     encomendas[encomendaIndex].cacifo = updatedEncomendas[0]?.cacifo || encomendas[encomendaIndex].cacifo;
                     encomendas[encomendaIndex].tamanho = updatedEncomendas[0]?.tamanho || encomendas[encomendaIndex].tamanho;
+                    encomendas[encomendaIndex].createdAt = new Date().getTime(); // Reset timer
                     console.log(`Encomenda #${codigoEncomenda} atualizada.`);
                 } else {
                     // Adicionar a nova encomenda apenas se não existir
@@ -161,12 +161,12 @@ function alterarLocalizacao(codigoEncomenda) {
                         tamanho: updatedEncomendas[0]?.tamanho || "Não especificado.",
                         estado: updatedEncomendas[0]?.estado || "Desconhecido",
                         dataExtenso: updatedEncomendas[0]?.dataExtenso || "Data não disponível",
-                        detalhes: updatedEncomendas[0]?.detalhes || "Sem detalhes"
+                        detalhes: updatedEncomendas[0]?.detalhes || "Sem detalhes",
+                        createdAt: new Date().getTime() // Reset timer
                     });
                 }
 
-                // Salvar no localStorage e localStorage
-                localStorage.setItem("encomendas", JSON.stringify(encomendas));
+                // Salvar no localStorage
                 localStorage.setItem("encomendas", JSON.stringify(encomendas));
 
                 // Atualiza a interface

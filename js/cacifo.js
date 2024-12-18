@@ -36,7 +36,7 @@ const cities = {
 // Inicializa o mapa
 const map = L.map("mapa").setView(cities.Lisboa.coords, 12);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 }).addTo(map);
 
 const markers = {};
@@ -67,6 +67,15 @@ const updateCacifos = (cidade) => {
 
     map.setView(cities[cidade].coords, 13);
 };
+
+// Remove the "Pesquisar" button event listener
+document.getElementById("cidade").addEventListener("change", () => {
+    const cidade = document.getElementById("cidade").value;
+    updateCacifos(cidade);
+});
+
+// Inicializa com Lisboa
+updateCacifos("Lisboa");
 
 // Reservar cacifo
 const reservarCacifo = (nomeCacifo) => {
@@ -157,13 +166,6 @@ $("#levantamento").on("click", function () {
     $("#acao-principal").addClass("d-none");
     $("#acao-encomenda").addClass("d-none");
     $("#acao-levantamento").removeClass("d-none");
-});
-
-
-// Pesquisa inicial em Lisboa
-document.getElementById("btn-pesquisar").addEventListener("click", () => {
-    const cidade = document.getElementById("cidade").value;
-    updateCacifos(cidade);
 });
 
 updateCacifos("Lisboa");

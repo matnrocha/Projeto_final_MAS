@@ -68,6 +68,27 @@ const updateCacifos = (cidade) => {
     map.setView(cities[cidade].coords, 13);
 };
 
+// Captura o código de encomenda da URL
+const urlParams = new URLSearchParams(window.location.search);
+const codigoEncomenda = urlParams.get("codigoEncomenda");
+
+if (codigoEncomenda) {
+    const encomendas = JSON.parse(localStorage.getItem("encomendas")) || [];
+    const encomenda = encomendas.find((e) => e.codigo === codigoEncomenda);
+
+    if (encomenda) {
+        console.log(`Encomenda encontrada!\nCodigo: ${encomenda.codigo}\nCacifo Atual: ${encomenda.cacifo}`);
+    }
+}
+
+// Remove the "Pesquisar" button event listener
+document.getElementById("cidade").addEventListener("change", () => {
+    const cidade = document.getElementById("cidade").value;
+    updateCacifos(cidade);
+});
+
+// Inicializa com Lisboa
+updateCacifos("Lisboa");
 
 // Reservar cacifo
 const reservarCacifo = (nomeCacifo) => {
@@ -93,65 +114,53 @@ const reservarCacifo = (nomeCacifo) => {
     novoConfirmarBtn.addEventListener("click", () => {
         const tamanho = document.getElementById("tamanhoEncomenda").value;
         
-        // Busca o array de encomendas no sessionStorage
-        const encomendas = JSON.parse(sessionStorage.getItem("encomendas")) || [];
+        // Busca o array de encomendas no localStorage
+        const encomendas = JSON.parse(localStorage.getItem("encomendas")) || [];
         
-        // Busca a encomenda existente (se houver) e remove do array
-        const indexEncomenda = encomendas.findIndex((e) => e.cacifo === nomeCacifo);
+        // Busca a encomenda existente (se houver) e altera o array
+        const indexEncomenda = encomendas.findIndex((e) => e.codigo === codigoEncomenda);
         let codigo;
 
         if (indexEncomenda !== -1) {
-            // Se a encomenda já existir, usa o mesmo código
+            // Se a encomenda já existir, usa o mesmo código e altera a encomenda
             codigo = encomendas[indexEncomenda].codigo;
-            encomendas.splice(indexEncomenda, 1); // Remove a encomenda antiga
+            encomendas[indexEncomenda] = {
+                codigo: codigo,
+                data: new Date().toLocaleDateString(),
+                dataExtenso: new Date().toLocaleDateString('pt-PT', { year: 'numeric', month: 'long', day: 'numeric' }),
+                estado: "Reservado",
+                detalhes: `Tamanho: ${tamanho}`,
+                cacifo: nomeCacifo,
+                createdAt: new Date().getTime(),
+            };
         } else {
-            // Se não existir, gera um novo código
+            // Se não existir, gera um novo código e cria uma nova encomenda
             codigo = codigoEncomenda;
-            encomendas.splice(indexEncomenda, 1);
+            const novaEncomenda = {
+                codigo: codigo,
+                data: new Date().toLocaleDateString(),
+                dataExtenso: new Date().toLocaleDateString('pt-PT', { year: 'numeric', month: 'long', day: 'numeric' }),
+                estado: "Reservado",
+                detalhes: `Tamanho: ${tamanho}`,
+                cacifo: nomeCacifo,
+                createdAt: new Date().getTime(),
+            };
+            encomendas.push(novaEncomenda);
         }
 
-        // Cria uma nova encomenda com o código reutilizado ou gerado
-        const novaEncomenda = {
-            codigo: codigo,
-            data: new Date().toLocaleDateString(),
-            dataExtenso: new Date().toLocaleDateString('pt-PT', { year: 'numeric', month: 'long', day: 'numeric' }),
-            estado: "Reservado",
-            detalhes: `Tamanho: ${tamanho}`,
-            cacifo: nomeCacifo,
-            createdAt: new Date().getTime(),
-        };
+        // Salva o array atualizado no localStorage
+        localStorage.setItem("encomendas", JSON.stringify(encomendas));
 
-        // Adiciona a nova encomenda ao array
-        encomendas.push(novaEncomenda);
+        // Oculta o modal atual
+        modal.hide();
 
-        // Salva o array atualizado no sessionStorage
-        sessionStorage.setItem("encomendas", JSON.stringify(encomendas));
+        // Exibe o modal de sucesso
+        const sucessoModal = new bootstrap.Modal(document.getElementById("sucessoModal"));
+        sucessoModal.show();
 
-        // Redireciona ou notifica o usuário
-        const baseUrl = `${window.location.origin}`;
-        const url = `${baseUrl}/alterarcacifo.html?codigoEncomenda=${codigoEncomenda}`;
-        window.location.href = url;
+        // Redireciona após 2 segundos
+        setTimeout(() => {
+            window.location.href = "encomenda.html";
+        }, 1000);
     });
 };
-
-// Captura o código de encomenda da URL
-const urlParams = new URLSearchParams(window.location.search);
-const codigoEncomenda = urlParams.get("codigoEncomenda");
-
-if (codigoEncomenda) {
-    const encomendas = JSON.parse(sessionStorage.getItem("encomendas")) || [];
-    const encomenda = encomendas.find((e) => e.codigo === codigoEncomenda);
-
-    if (encomenda) {
-        alert(`Alteração detectada!\nEncomenda: ${encomenda.codigo}\nCacifo Atual: ${encomenda.cacifo}`);
-    }
-}
-
-// Pesquisa inicial em Lisboa
-document.getElementById("btn-pesquisar").addEventListener("click", () => {
-    const cidade = document.getElementById("cidade").value;
-    updateCacifos(cidade);
-});
-
-// Inicializa com Lisboa
-updateCacifos("Lisboa");    
