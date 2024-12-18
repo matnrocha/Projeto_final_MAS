@@ -128,8 +128,9 @@ const reservarCacifo = (nomeCacifo) => {
         sessionStorage.setItem("encomendas", JSON.stringify(encomendas));
 
         // Redireciona ou notifica o usuário
-        alert(`Encomenda atualizada com sucesso! Código: ${codigo}`);
-        window.location.href = "http://localhost:5292/Projeto_final_MAS/encomenda.html";
+        const baseUrl = `${window.location.origin}`;
+        const url = `${baseUrl}/alterarcacifo.html?codigoEncomenda=${codigoEncomenda}`;
+        window.location.href = url;
     });
 };
 
