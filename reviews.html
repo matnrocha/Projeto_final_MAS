@@ -13,127 +13,88 @@
     <link rel="stylesheet" href="css/styles.css">
     <script defer src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script defer src="js/main.js"></script>
-    <style>
-        body {
-            padding: 90px 0 70px 0;
-        }
-    </style>
+    <script src="js/main.js"></script>
+    <script defer src="js/reviews.js"></script>
+    <script defer src="js/loadReviews.js"></script>
 </head>
 <body>
     <!-- Navbar --> 
     <div id="navbar"></div>
     
     <!-- Conteúdo principal -->
-    <main class="container mt-4">
-        <header class="text-center mb-4">
-            <h1>Reviews dos Cacifos Automáticos Est'aki</h1>
-            <p>Deixe sua opinião sobre sua experiência com os cacifos automáticos Est'aki!</p>
-        </header>
-
-        <section class="reviews">
-            <h2 class="mb-3">Avaliações Recentes</h2>
-            <div id="reviewsContainer" class="list-group mb-4">
-                <div class="list-group-item">
-                    <h5>João Silva</h5>
-                    <p>Ótima experiência! Os cacifos são muito práticos.</p>
-                    <small class="text-muted">Email: joao.silva@email.com</small>
-                    <p class="mt-2">Avaliação: ⭐⭐⭐⭐⭐</p>
-                </div>
-                <div class="list-group-item">
-                    <h5>Maria Oliveira</h5>
-                    <p>Facilitou bastante o meu dia a dia, mas poderia ter mais locais disponíveis.</p>
-                    <small class="text-muted">Email: maria.oliveira@email.com</small>
-                    <p class="mt-2">Avaliação: ⭐⭐⭐⭐</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="review-form p-4" style="background-color: #d4edda; border-radius: 8px;">
-            <h2>Deixe sua avaliação</h2>
-            <form id="reviewForm" class="needs-validation" novalidate>
-                <div class="mb-3">
-                    <label for="name" class="form-label">Seu nome</label>
-                    <input type="text" id="name" class="form-control" placeholder="Seu nome" required>
-                    <div class="invalid-feedback">Por favor, insira seu nome.</div>
-                </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Seu email</label>
-                    <input type="email" id="email" class="form-control" placeholder="Seu email" required>
-                    <div class="invalid-feedback">Por favor, insira um email válido.</div>
-                </div>
-                <div class="mb-3">
-                    <label for="review" class="form-label">Sua avaliação</label>
-                    <textarea id="review" class="form-control" placeholder="Escreva sua avaliação aqui..." rows="4" required></textarea>
-                    <div class="invalid-feedback">Por favor, escreva sua avaliação.</div>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Sua nota</label>
-                    <div id="rating" class="d-flex gap-2">
-                        <div>
-                            <input type="radio" id="star1" name="rating" value="1" required>
-                            <label for="star1">⭐</label>
-                        </div>
-                        <div>
-                            <input type="radio" id="star2" name="rating" value="2">
-                            <label for="star2">⭐⭐</label>
-                        </div>
-                        <div>
-                            <input type="radio" id="star3" name="rating" value="3">
-                            <label for="star3">⭐⭐⭐</label>
-                        </div>
-                        <div>
-                            <input type="radio" id="star4" name="rating" value="4">
-                            <label for="star4">⭐⭐⭐⭐</label>
-                        </div>
-                        <div>
-                            <input type="radio" id="star5" name="rating" value="5">
-                            <label for="star5">⭐⭐⭐⭐⭐</label>
-                        </div>
+    <main>
+        <div class="container mt-4">
+            <header class="text-center mb-4">
+                <h1>Reviews dos Cacifos Automáticos Est'aki</h1>
+                <p>Deixe sua opinião sobre sua experiência com os cacifos automáticos Est'aki!</p>
+            </header>
+            <section class="reviews">
+                <h2 class="mb-3">Avaliações Recentes</h2>
+                <div id="reviewsContainer" class="list-group mb-4">
+                    <div class="list-group-item">
+                        <h5>João Silva</h5>
+                        <p>Ótima experiência! Os cacifos são muito práticos.</p>
+                        <small class="text-muted">Email: joao.silva@email.com</small>
+                        <p class="mt-2">Avaliação: ⭐⭐⭐⭐⭐</p>
                     </div>
-                    <div class="invalid-feedback">Por favor, escolha uma nota.</div>
+                    <div class="list-group-item">
+                        <h5>Maria Oliveira</h5>
+                        <p>Facilitou bastante o meu dia a dia, mas poderia ter mais locais disponíveis.</p>
+                        <small class="text-muted">Email: maria.oliveira@email.com</small>
+                        <p class="mt-2">Avaliação: ⭐⭐⭐⭐</p>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Adicionar Avaliação</button>
-            </form>
-        </section>
+            </section>
+            <section class="review-form p-4" style="background-color: #d4edda; border-radius: 8px;">
+                <h2>Deixe sua avaliação</h2>
+                <form id="reviewForm" class="needs-validation" novalidate>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Seu nome</label>
+                        <input type="text" id="name" class="form-control" placeholder="Seu nome" required>
+                        <div class="invalid-feedback">Por favor, insira seu nome.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Seu email</label>
+                        <input type="email" id="email" class="form-control" placeholder="Seu email" required>
+                        <div class="invalid-feedback">Por favor, insira um email válido.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="review" class="form-label">Sua avaliação</label>
+                        <textarea id="review" class="form-control" placeholder="Escreva sua avaliação aqui..." rows="4" required></textarea>
+                        <div class="invalid-feedback">Por favor, escreva sua avaliação.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Sua nota</label>
+                        <div id="rating" class="d-flex gap-2">
+                            <div>
+                                <input type="radio" id="star1" name="rating" value="1" required>
+                                <label for="star1">⭐</label>
+                            </div>
+                            <div>
+                                <input type="radio" id="star2" name="rating" value="2">
+                                <label for="star2">⭐⭐</label>
+                            </div>
+                            <div>
+                                <input type="radio" id="star3" name="rating" value="3">
+                                <label for="star3">⭐⭐⭐</label>
+                            </div>
+                            <div>
+                                <input type="radio" id="star4" name="rating" value="4">
+                                <label for="star4">⭐⭐⭐⭐</label>
+                            </div>
+                            <div>
+                                <input type="radio" id="star5" name="rating" value="5">
+                                <label for="star5">⭐⭐⭐⭐⭐</label>
+                            </div>
+                        </div>
+                        <div class="invalid-feedback">Por favor, escolha uma nota.</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Adicionar Avaliação</button>
+                </form>
+            </section>
+        </div>
     </main>
-
-    <script>
-        // Manipulação de submissão do formulário
-        document.getElementById('reviewForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            if (!this.checkValidity()) {
-                this.classList.add('was-validated');
-                return;
-            }
-
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const review = document.getElementById('review').value;
-            const rating = document.querySelector('input[name="rating"]:checked').value;
-
-            const reviewContainer = document.getElementById('reviewsContainer');
-            const reviewDiv = document.createElement('div');
-            reviewDiv.classList.add('list-group-item');
-
-            let stars = '⭐'.repeat(rating);
-
-            reviewDiv.innerHTML = `
-                <h5>${name}</h5>
-                <p>${review}</p>
-                <small class="text-muted">Email: ${email}</small>
-                <p class="mt-2">Avaliação: ${stars}</p>
-            `;
-
-            reviewContainer.prepend(reviewDiv);
-
-            // Limpa o formulário
-            document.getElementById('name').value = '';
-            document.getElementById('email').value = '';
-            document.getElementById('review').value = '';
-            document.querySelector('input[name="rating"]:checked').checked = false;
-            this.classList.remove('was-validated');
-        });
-    </script>
+    <!-- Footer -->
+    <div id="footer"></div>
 </body>
 </html>

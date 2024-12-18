@@ -10,6 +10,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     padding: 10px 20px;
+    margin-top: 0.250rem;
 }
 
 .navbar-brand img {
@@ -20,12 +21,16 @@
     font-size: 1rem;
     color: #000;
     font-weight: 500;
-    transition: color 0.3s ease;
+    transition: color 0.2s ease;
     position: relative;
 }
 
+.navbar-nav .nav-item:last-child {
+    margin-right: 1.125rem;
+}
+
 .navbar-nav .nav-link:hover {
-    color: #007bff;
+    color: #006ce0;
 }
 
 .navbar-nav .nav-link::after {
@@ -34,7 +39,7 @@
     width: 0;
     height: 3px;
     background-color: orange;
-    transition: width 0.3s;
+    transition: width 0.4s;
     position: absolute;
     bottom: -5px;
     left: 0;

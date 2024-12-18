@@ -9,6 +9,7 @@ function generateCountdownTimer(encomenda) {
         if (distance < 0) {
             countdownContainer.innerHTML = "00:00:00";
             countdownContainer.style.color = "red";
+            encomenda.estado = "Expirado"; // Change estado to Expirado
             clearInterval(interval);
             return;
         }

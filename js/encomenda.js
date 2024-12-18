@@ -9,19 +9,18 @@ document.addEventListener("DOMContentLoaded", function () {
 function atualizarEncomendas() {
     console.log("Atualizando lista de encomendas...");
     const encomendasList = document.getElementById("encomendas-list");
-    const encomendas = JSON.parse(sessionStorage.getItem("encomendas")) || [];
-    const localEncomendas = JSON.parse(localStorage.getItem("encomendas")) || [];
+    const encomendas = JSON.parse(localStorage.getItem("encomendas")) || [];
+
+    // Ordena as encomendas por data de criação (createdAt)
+    encomendas.sort((a, b) => a.createdAt - b.createdAt);
 
     // Limpa a lista antes de renderizar
     encomendasList.innerHTML = "";
 
-    if (encomendas.length === 0 && localEncomendas.length === 0) {
+    if (encomendas.length === 0) {
         encomendasList.innerHTML = "<p>Você não tem nenhuma encomenda no momento.</p>";
     } else {
-        // Combina sessionStorage e localStorage
-        const todasEncomendas = [...localEncomendas, ...encomendas];
-
-        todasEncomendas.forEach((encomenda) => {
+        encomendas.forEach((encomenda) => {
             const encomendaDiv = document.createElement("div");
             encomendaDiv.className = "encomenda-item";
 
@@ -77,12 +76,12 @@ function generateCountdownTimer(encomenda) {
     const agora = Date.now();
 
     // Carregar o tempo salvo ou criar um novo
-    const savedEndTime = sessionStorage.getItem(`timer_${encomenda.codigo}`);
+    const savedEndTime = localStorage.getItem(`timer_${encomenda.codigo}`);
     const endTime = savedEndTime ? parseInt(savedEndTime, 10) : agora + 3600000; // Exemplo: 1 hora restante
 
     // Salva o tempo final, caso ainda não tenha sido salvo
     if (!savedEndTime) {
-        sessionStorage.setItem(`timer_${encomenda.codigo}`, endTime);
+        localStorage.setItem(`timer_${encomenda.codigo}`, endTime);
     }
 
     function atualizarTimer() {
@@ -91,7 +90,7 @@ function generateCountdownTimer(encomenda) {
         if (tempoRestante <= 0) {
             timerElement.textContent = "Tempo esgotado!";
             clearInterval(interval);
-            sessionStorage.removeItem(`timer_${encomenda.codigo}`);
+            localStorage.removeItem(`timer_${encomenda.codigo}`);
         } else {
             const horas = Math.floor((tempoRestante / (1000 * 60 * 60)) % 24);
             const minutos = Math.floor((tempoRestante / (1000 * 60)) % 60);
@@ -131,7 +130,9 @@ function verEstado(estado) {
  */
 function alterarLocalizacao(codigoEncomenda) {
     console.log(`Alterando localização para Encomenda #${codigoEncomenda}...`);
-    const url = `http://127.0.0.1:5501/alterarcacifo.html?codigoEncomenda=${codigoEncomenda}`;
+
+    const baseUrl = `${window.location.origin}`;
+    const url = `${baseUrl}/alterarcacifo.html?codigoEncomenda=${codigoEncomenda}`;
     window.location.href = url;
 
     setTimeout(() => {
@@ -140,8 +141,8 @@ function alterarLocalizacao(codigoEncomenda) {
         fetch(`http://localhost:5292/api/obterEncomendas`)
             .then(response => response.json())
             .then(updatedEncomendas => {
-                // Obter as encomendas atuais do sessionStorage
-                let encomendas = JSON.parse(sessionStorage.getItem("encomendas")) || [];
+                // Obter as encomendas atuais do localStorage
+                let encomendas = JSON.parse(localStorage.getItem("encomendas")) || [];
 
                 // Verificar se a encomenda já existe
                 const encomendaIndex = encomendas.findIndex(encomenda => encomenda.codigo === codigoEncomenda);
@@ -150,6 +151,7 @@ function alterarLocalizacao(codigoEncomenda) {
                     // Atualizar a encomenda existente
                     encomendas[encomendaIndex].cacifo = updatedEncomendas[0]?.cacifo || encomendas[encomendaIndex].cacifo;
                     encomendas[encomendaIndex].tamanho = updatedEncomendas[0]?.tamanho || encomendas[encomendaIndex].tamanho;
+                    encomendas[encomendaIndex].createdAt = new Date().getTime(); // Reset timer
                     console.log(`Encomenda #${codigoEncomenda} atualizada.`);
                 } else {
                     // Adicionar a nova encomenda apenas se não existir
@@ -160,12 +162,12 @@ function alterarLocalizacao(codigoEncomenda) {
                         tamanho: updatedEncomendas[0]?.tamanho || "Não especificado.",
                         estado: updatedEncomendas[0]?.estado || "Desconhecido",
                         dataExtenso: updatedEncomendas[0]?.dataExtenso || "Data não disponível",
-                        detalhes: updatedEncomendas[0]?.detalhes || "Sem detalhes"
+                        detalhes: updatedEncomendas[0]?.detalhes || "Sem detalhes",
+                        createdAt: new Date().getTime() // Reset timer
                     });
                 }
 
-                // Salvar no sessionStorage e localStorage
-                sessionStorage.setItem("encomendas", JSON.stringify(encomendas));
+                // Salvar no localStorage
                 localStorage.setItem("encomendas", JSON.stringify(encomendas));
 
                 // Atualiza a interface

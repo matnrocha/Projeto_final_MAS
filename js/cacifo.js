@@ -36,7 +36,7 @@ const cities = {
 // Inicializa o mapa
 const map = L.map("mapa").setView(cities.Lisboa.coords, 12);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 }).addTo(map);
 
 const markers = {};
@@ -68,6 +68,15 @@ const updateCacifos = (cidade) => {
     map.setView(cities[cidade].coords, 13);
 };
 
+// Remove the "Pesquisar" button event listener
+document.getElementById("cidade").addEventListener("change", () => {
+    const cidade = document.getElementById("cidade").value;
+    updateCacifos(cidade);
+});
+
+// Inicializa com Lisboa
+updateCacifos("Lisboa");
+
 // Reservar cacifo
 const reservarCacifo = (nomeCacifo) => {
     const modal = new bootstrap.Modal(document.getElementById("modalEscolha"));
@@ -98,18 +107,25 @@ const reservarCacifo = (nomeCacifo) => {
             createdAt: new Date().getTime(), // Adiciona o tempo de criação da encomenda
         };
 
-        const encomendas = JSON.parse(sessionStorage.getItem("encomendas")) || [];
+        const encomendas = JSON.parse(localStorage.getItem("encomendas")) || [];
         encomendas.push(novaEncomenda);
-        sessionStorage.setItem("encomendas", JSON.stringify(encomendas));
+        localStorage.setItem("encomendas", JSON.stringify(encomendas));
 
-        alert(`Reserva feita com sucesso!\nCacifo: ${nomeCacifo}\nTamanho: ${tamanho}\nCódigo: ${codigo}`);
+        // Show dialog instead of alert
+        const modalConfirmacao = document.getElementById("modalConfirmacao");
+        document.getElementById("modalConfirmacaoBody").innerHTML = `
+            <h2>#${codigo}</h2>
+            <p>Reserva feita com sucesso!</p><br><p>Verifique o estado do seu pedido em encomendas</p>
+            <button type="button" class="btn btn-success" onclick="document.getElementById('modalConfirmacao').close()">Fechar</button>
+        `;
+        modalConfirmacao.showModal();
         bootstrap.Modal.getInstance(document.getElementById("modalEscolha")).hide();
     });
 };
 //levantamento
 document.getElementById("confirmarLevantamento").addEventListener("click", () => {
     const codigoInserido = document.getElementById("codigoLevantamentoInput").value.trim();
-    let encomendas = JSON.parse(sessionStorage.getItem("encomendas")) || [];
+    let encomendas = JSON.parse(localStorage.getItem("encomendas")) || [];
 
     let encomendaEncontrada = encomendas.find(encomenda => encomenda.codigo === codigoInserido);
 
@@ -117,7 +133,7 @@ document.getElementById("confirmarLevantamento").addEventListener("click", () =>
         alert(`Levantamento realizado com sucesso!\nCacifo: ${encomendaEncontrada.cacifo}\nCódigo: ${encomendaEncontrada.codigo}`);
         // Atualizar o estado para "Levantado"
         encomendaEncontrada.estado = "Levantado";
-        sessionStorage.setItem("encomendas", JSON.stringify(encomendas));
+        localStorage.setItem("encomendas", JSON.stringify(encomendas));
     } else if (codigoInserido === "1234") {
         // Cria uma encomenda fictícia para o código "1234"
         const novaEncomenda = {
@@ -131,7 +147,7 @@ document.getElementById("confirmarLevantamento").addEventListener("click", () =>
         };
 
         encomendas.push(novaEncomenda);
-        sessionStorage.setItem("encomendas", JSON.stringify(encomendas));
+        localStorage.setItem("encomendas", JSON.stringify(encomendas));
 
         alert(`Reserva criada e levantamento realizado com sucesso!\nCacifo: ${novaEncomenda.cacifo}\nCódigo: ${novaEncomenda.codigo}`);
 
@@ -157,13 +173,6 @@ $("#levantamento").on("click", function () {
     $("#acao-principal").addClass("d-none");
     $("#acao-encomenda").addClass("d-none");
     $("#acao-levantamento").removeClass("d-none");
-});
-
-
-// Pesquisa inicial em Lisboa
-document.getElementById("btn-pesquisar").addEventListener("click", () => {
-    const cidade = document.getElementById("cidade").value;
-    updateCacifos(cidade);
 });
 
 updateCacifos("Lisboa");
