@@ -131,7 +131,8 @@ function verEstado(estado) {
  */
 function alterarLocalizacao(codigoEncomenda) {
     console.log(`Alterando localização para Encomenda #${codigoEncomenda}...`);
-    const url = `http://localhost:5292/Projeto_final_MAS/alterarcacifo.html?codigoEncomenda=${codigoEncomenda}`;
+    const baseUrl = `${window.location.origin}`;
+    const url = `${baseUrl}/alterarcacifo.html?codigoEncomenda=${codigoEncomenda}`;
     window.location.href = url;
 
     setTimeout(() => {
