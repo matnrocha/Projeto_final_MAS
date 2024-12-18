@@ -21,4 +21,5 @@ body {
 main {
     flex: 1;
     margin: 7em 0;
+    min-height: 75vh
 }
