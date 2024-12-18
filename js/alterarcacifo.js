@@ -129,7 +129,7 @@ const reservarCacifo = (nomeCacifo) => {
 
         // Redireciona ou notifica o usuário
         alert(`Encomenda atualizada com sucesso! Código: ${codigo}`);
-        window.location.href = "http://localhost:5292/Projeto_final_MAS/encomenda.html";
+        window.location.href = "http://127.0.0.1:5501/encomenda.html";
     });
 };
 
