@@ -155,12 +155,12 @@ const reservarCacifo = (nomeCacifo) => {
         modal.hide();
 
         // Exibe o modal de sucesso
-        const sucessoModal = new bootstrap.Modal(document.getElementById("sucessoModal"));
-        sucessoModal.show();
-
-        // Redireciona após 2 segundos
-        setTimeout(() => {
-            window.location.href = "encomenda.html";
-        }, 1000);
+        const modalConfirmacao = document.getElementById("modalConfirmacao");
+        document.getElementById("modalConfirmacaoBody").innerHTML = `
+            <h2>#${codigo}</h2>
+            <p>Alterações feitas com sucesso!</p><br><p>Verifique o estado da sua reserva em encomendas</p>
+            <button type="button" class="btn btn-success" onclick="window.location.href='cacifo.html'">Fechar</button>
+        `;
+        modalConfirmacao.showModal();
     });
 };

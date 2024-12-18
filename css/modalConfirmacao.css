@@ -1,0 +1,58 @@
+.modalConfirmacao {
+    width: 400px;
+    background-color: #fff;
+    border-radius: 6px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    padding: 0 30px 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1050;
+    overflow: visible; 
+    border: none;
+}
+
+.modalConfirmacao img {
+    width: 100px;
+    margin-top: -50px;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 1060;
+    position: relative;
+}
+
+.modalConfirmacao h2 {
+    font-size: 2.250rem;
+    font-weight: bold;
+    margin: 39px 0 10px;
+}
+
+.modalConfirmacao p {
+    color: #666;
+}
+
+.modalConfirmacaoBody button {
+    width: 100%;
+    margin-top: 15px;
+    padding: 10px 0;
+    background: #6fd649;
+    color: #fff;
+    border: 0;
+    outline: none;
+    font-size: 1.125rem;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+}
+
+dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+
+  }
+  

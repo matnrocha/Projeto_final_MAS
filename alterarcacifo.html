@@ -85,19 +85,12 @@
     </div>
 
     <!-- Modal de Sucesso -->
-    <div class="modal fade" id="sucessoModal" tabindex="-1" aria-labelledby="sucessoModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="sucessoModalLabel">Sucesso</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Alterações guardadas com sucesso!
-                </div>
-            </div>
+    <dialog id="modalConfirmacao" class="modalConfirmacao">
+        <img src="images/icons/404-tick.png" alt="">
+        <div class="modalConfirmacaoBody" id="modalConfirmacaoBody">
+            <!-- Conteúdo da confirmação será preenchido dinamicamente -->
         </div>
-    </div>
+    </dialog>
     </main>
     <!-- Footer -->
     <div id="footer"></div>

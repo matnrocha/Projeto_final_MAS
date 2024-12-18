@@ -111,7 +111,14 @@ const reservarCacifo = (nomeCacifo) => {
         encomendas.push(novaEncomenda);
         localStorage.setItem("encomendas", JSON.stringify(encomendas));
 
-        alert(`Reserva feita com sucesso!\nCacifo: ${nomeCacifo}\nTamanho: ${tamanho}\nCódigo: ${codigo}`);
+        // Show dialog instead of alert
+        const modalConfirmacao = document.getElementById("modalConfirmacao");
+        document.getElementById("modalConfirmacaoBody").innerHTML = `
+            <h2>#${codigo}</h2>
+            <p>Reserva feita com sucesso!</p><br><p>Verifique o estado do seu pedido em encomendas</p>
+            <button type="button" class="btn btn-success" onclick="document.getElementById('modalConfirmacao').close()">Fechar</button>
+        `;
+        modalConfirmacao.showModal();
         bootstrap.Modal.getInstance(document.getElementById("modalEscolha")).hide();
     });
 };
