@@ -150,9 +150,10 @@ document.getElementById("confirmarLevantamento").addEventListener("click", () =>
         localStorage.setItem("encomendas", JSON.stringify(encomendas));
 
         alert(`Reserva criada e levantamento realizado com sucesso!\nCacifo: ${novaEncomenda.cacifo}\nCódigo: ${novaEncomenda.codigo}`);
-
+        modal.hide()
     } else {
         alert("Código inválido ou encomenda não encontrada!");
+        modal.hide()
     }
 
     // Limpa o campo de entrada após a tentativa

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <title>Est'Aki - Encomendas</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script defer src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="js/main.js"></script>
+    <script defer src="js/encomenda.js"></script>
+    <script defer src="js/countdownTimer.js"></script>
+    <style>
+        
+    </style>
+</head>
+<body>
+    <!-- Navbar --> 
+    <div id="navbar"></div>
+    <main>
+        <div class="container encomendas-container">
+            <h2>Minhas Encomendas Passadas</h2>
+            <div id="historico-list">
+                <!-- Lista de encomendas será renderizada aqui -->
+            </div>
+        </div>
+    
+        <!-- Modal para mostrar o estado -->
+        <div class="modal fade" id="estadoModal" tabindex="-1" aria-labelledby="estadoModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="estadoModalLabel">Estado da Encomenda</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="progress-container">
+                            <div class="step" id="step-envio">Envio</div>
+                            <div class="step" id="step-transporte">Em Transporte</div>
+                            <div class="step" id="step-entregue">Entregue</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    </main>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            atualizarHistorico(); // Chama a função para exibir o histórico ao carregar a página
+        });
+    </script>
+    <!-- Footer -->
+    <div id="footer"></div>
+</body>
+</html>

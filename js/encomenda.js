@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     console.log("Página carregada. Atualizando encomendas...");
     atualizarEncomendas(); // Chama a função para exibir as encomendas ao carregar a página
+    atualizarHistorico(); // Chama a função para exibir o histórico ao carregar a página
 });
 
 /**
@@ -17,10 +18,19 @@ function atualizarEncomendas() {
     // Limpa a lista antes de renderizar
     encomendasList.innerHTML = "";
 
-    if (encomendas.length === 0) {
+    const now = Date.now();
+    const activeEncomendas = encomendas.filter(encomenda => encomenda.createdAt + 3600000 > now); // 1 hour in milliseconds
+    const expiredEncomendas = encomendas.filter(encomenda => encomenda.createdAt + 3600000 <= now);
+
+    // Atualiza o localStorage com as encomendas ativas
+    localStorage.setItem("encomendas", JSON.stringify(activeEncomendas));
+    // Atualiza o localStorage com as encomendas expiradas
+    localStorage.setItem("historico", JSON.stringify(expiredEncomendas));
+
+    if (activeEncomendas.length === 0) {
         encomendasList.innerHTML = "<p>Você não tem nenhuma encomenda no momento.</p>";
     } else {
-        encomendas.forEach((encomenda) => {
+        activeEncomendas.forEach((encomenda) => {
             const encomendaDiv = document.createElement("div");
             encomendaDiv.className = "encomenda-item";
 
@@ -175,6 +185,52 @@ function alterarLocalizacao(codigoEncomenda) {
             })
             .catch(error => console.error('Erro ao obter encomendas:', error));
     }, 1000); // Pequeno atraso para garantir o redirecionamento
+}
+
+/**
+ * Função para atualizar o histórico de encomendas na interface
+ */
+function atualizarHistorico() {
+    console.log("Atualizando histórico de encomendas...");
+    const historicoList = document.getElementById("historico-list");
+    const historico = JSON.parse(localStorage.getItem("historico")) || [];
+
+    // Limpa a lista antes de renderizar
+    historicoList.innerHTML = "";
+
+    if (historico.length === 0) {
+        historicoList.innerHTML = "<p>Você não tem nenhuma encomenda passada no momento.</p>";
+    } else {
+        historico.forEach((encomenda) => {
+            const encomendaDiv = document.createElement("div");
+            encomendaDiv.className = "encomenda-item";
+
+            encomendaDiv.innerHTML = `
+                <p><strong>Encomenda #${encomenda.codigo}</strong></p>
+                <p>
+                    <span style="color: hsl(210, 17%, 25%)">Data:</span> 
+                    <span style="font-weight: 500">${encomenda.dataExtenso || "Não disponível"}</span> | 
+                    <span style="color: hsl(210, 17%, 25%)">Estado: </span>
+                    <span style="font-weight: 500">${encomenda.estado || "Desconhecido"}</span>
+                </p>
+                <p style="margin-bottom:0">
+                    <span style="color: hsl(210, 17%, 25%)">Detalhes:</span><br />
+                    <ul class="mb-4">
+                        <li style="font-size:0.925rem; font-weight: 500">
+                            ${encomenda.detalhes || "Nenhum detalhe fornecido."}
+                        </li>
+                    </ul>
+                </p>
+                <p style="margin-bottom:0.25rem">
+                    <span style="font-size: 0.95rem">
+                        <span style="color: hsl(210, 17%, 25%)">Localização do cacifo:</span> 
+                        <span style="font-weight: 500">${encomenda.cacifo || "Não especificado."}</span>
+                    </span>
+                </p>
+            `;
+            historicoList.appendChild(encomendaDiv);
+        });
+    }
 }
 
 /**
