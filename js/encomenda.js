@@ -9,7 +9,10 @@ document.addEventListener("DOMContentLoaded", function () {
 function atualizarEncomendas() {
     console.log("Atualizando lista de encomendas...");
     const encomendasList = document.getElementById("encomendas-list");
-    const encomendas = JSON.parse(localStorage.getItem("encomendas")) || [];
+    let encomendas = JSON.parse(localStorage.getItem("encomendas")) || [];
+
+    // Filtra encomendas que ainda não expiraram
+    encomendas = encomendas.filter(encomenda => encomenda.estado !== "Expirado");
 
     // Ordena as encomendas por data de criação (createdAt)
     encomendas.sort((a, b) => a.createdAt - b.createdAt);
@@ -32,31 +35,7 @@ function atualizarEncomendas() {
                     <span style="color: hsl(210, 17%, 25%)">Estado: </span>
                     <span style="font-weight: 500">${encomenda.estado || "Desconhecido"}</span>
                 </p>
-                <p style="margin-bottom:0">
-                    <span style="color: hsl(210, 17%, 25%)">Detalhes:</span><br />
-                    <ul class="mb-4">
-                        <li style="font-size:0.925rem; font-weight: 500">
-                            ${encomenda.detalhes || "Nenhum detalhe fornecido."}
-                        </li>
-                    </ul>
-                </p>
                 <p id="${encomenda.codigo}-timer" class="countdown-timer"></p>
-                <p style="margin-bottom:0.25rem">
-                    <span style="font-size: 0.95rem">
-                        <span style="color: hsl(210, 17%, 25%)">Localização do cacifo:</span> 
-                        <span style="font-weight: 500">${encomenda.cacifo || "Não especificado."}</span>
-                    </span><br />
-                    <button 
-                        class="mt-3 btn btn-warning ms-2" 
-                        onclick="alterarLocalizacao('${encomenda.codigo}')">
-                        Alterar Localização
-                    </button>
-                    <button 
-                        class="mt-3 btn btn-info ms-2" 
-                        onclick="verEstado('${encomenda.estado}')">
-                        Ver Estado
-                    </button>
-                </p>
             `;
             encomendasList.appendChild(encomendaDiv);
 
@@ -66,6 +45,9 @@ function atualizarEncomendas() {
             }
         });
     }
+
+    // Atualiza o localStorage com apenas as encomendas não expiradas
+    localStorage.setItem("encomendas", JSON.stringify(encomendas));
 }
 
 /**
@@ -91,6 +73,22 @@ function generateCountdownTimer(encomenda) {
             timerElement.textContent = "Tempo esgotado!";
             clearInterval(interval);
             localStorage.removeItem(`timer_${encomenda.codigo}`);
+
+            // Muda o estado da encomenda para "Expirado"
+            encomenda.estado = "Expirado";
+
+            // Move a encomenda para o histórico
+            const historico = JSON.parse(localStorage.getItem("historicoEncomendas")) || [];
+            historico.push(encomenda);
+            localStorage.setItem("historicoEncomendas", JSON.stringify(historico));
+
+            // Remove a encomenda da lista ativa
+            let encomendas = JSON.parse(localStorage.getItem("encomendas")) || [];
+            encomendas = encomendas.filter(e => e.codigo !== encomenda.codigo);
+            localStorage.setItem("encomendas", JSON.stringify(encomendas));
+
+            // Atualiza a interface para remover a encomenda expirada
+            atualizarEncomendas();
         } else {
             const horas = Math.floor((tempoRestante / (1000 * 60 * 60)) % 24);
             const minutos = Math.floor((tempoRestante / (1000 * 60)) % 60);
@@ -102,81 +100,3 @@ function generateCountdownTimer(encomenda) {
     atualizarTimer(); // Atualiza o timer imediatamente
     const interval = setInterval(atualizarTimer, 1000);
 }
-
-/**
- * Função para visualizar o estado de uma encomenda
- */
-function verEstado(estado) {
-    console.log(`Visualizando estado: ${estado}`);
-    document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
-
-    if (estado === "Envio") {
-        document.getElementById("step-envio").classList.add("active");
-    } else if (estado === "Em Transporte") {
-        document.getElementById("step-envio").classList.add("active");
-        document.getElementById("step-transporte").classList.add("active");
-    } else if (estado === "Entregue") {
-        document.getElementById("step-envio").classList.add("active");
-        document.getElementById("step-transporte").classList.add("active");
-        document.getElementById("step-entregue").classList.add("active");
-    }
-
-    const estadoModal = new bootstrap.Modal(document.getElementById("estadoModal"));
-    estadoModal.show();
-}
-
-/**
- * Função para alterar a localização de uma encomenda
- */
-function alterarLocalizacao(codigoEncomenda) {
-    console.log(`Alterando localização para Encomenda #${codigoEncomenda}...`);
-
-    const baseUrl = `${window.location.origin}`;
-    const url = `${baseUrl}/alterarcacifo.html?codigoEncomenda=${codigoEncomenda}`;
-    window.location.href = url;
-
-    setTimeout(() => {
-        console.log("Buscando dados atualizados após alteração...");
-
-        fetch(`http://localhost:5292/api/obterEncomendas`)
-            .then(response => response.json())
-            .then(updatedEncomendas => {
-                // Obter as encomendas atuais do localStorage
-                let encomendas = JSON.parse(localStorage.getItem("encomendas")) || [];
-
-                // Verificar se a encomenda já existe
-                const encomendaIndex = encomendas.findIndex(encomenda => encomenda.codigo === codigoEncomenda);
-
-                if (encomendaIndex !== -1) {
-                    // Atualizar a encomenda existente
-                    encomendas[encomendaIndex].cacifo = updatedEncomendas[0]?.cacifo || encomendas[encomendaIndex].cacifo;
-                    encomendas[encomendaIndex].tamanho = updatedEncomendas[0]?.tamanho || encomendas[encomendaIndex].tamanho;
-                    encomendas[encomendaIndex].createdAt = new Date().getTime(); // Reset timer
-                    console.log(`Encomenda #${codigoEncomenda} atualizada.`);
-                } else {
-                    // Adicionar a nova encomenda apenas se não existir
-                    console.log(`Encomenda #${codigoEncomenda} não encontrada. Criando nova.`);
-                    encomendas.push({
-                        codigo: codigoEncomenda,
-                        cacifo: updatedEncomendas[0]?.cacifo || "Não especificado.",
-                        tamanho: updatedEncomendas[0]?.tamanho || "Não especificado.",
-                        estado: updatedEncomendas[0]?.estado || "Desconhecido",
-                        dataExtenso: updatedEncomendas[0]?.dataExtenso || "Data não disponível",
-                        detalhes: updatedEncomendas[0]?.detalhes || "Sem detalhes",
-                        createdAt: new Date().getTime() // Reset timer
-                    });
-                }
-
-                // Salvar no localStorage
-                localStorage.setItem("encomendas", JSON.stringify(encomendas));
-
-                // Atualiza a interface
-                atualizarEncomendas();
-            })
-            .catch(error => console.error('Erro ao obter encomendas:', error));
-    }, 1000); // Pequeno atraso para garantir o redirecionamento
-}
-
-/**
- * Botão adicional para atualizar encomendas manualmente
- */

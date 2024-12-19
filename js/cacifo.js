@@ -135,23 +135,35 @@ document.getElementById("confirmarLevantamento").addEventListener("click", () =>
         encomendaEncontrada.estado = "Levantado";
         localStorage.setItem("encomendas", JSON.stringify(encomendas));
     } else if (codigoInserido === "1234") {
-        // Cria uma encomenda fictícia para o código "1234"
-        const novaEncomenda = {
-            codigo: "1234",
-            data: new Date().toLocaleDateString(),
-            dataExtenso: new Date().toLocaleDateString('pt-PT', { year: 'numeric', month: 'long', day: 'numeric'}),
-            estado: "Reservado",
-            detalhes: `Tamanho: médio`,
-            cacifo: "Lisboa Centro",
-            createdAt: new Date().getTime(),
-        };
-
-        encomendas.push(novaEncomenda);
-        localStorage.setItem("encomendas", JSON.stringify(encomendas));
-
-        alert(`Reserva criada e levantamento realizado com sucesso!\nCacifo: ${novaEncomenda.cacifo}\nCódigo: ${novaEncomenda.codigo}`);
-
-    } else {
+        // Obtém a cidade selecionada
+        const cidadeSelecionada = document.getElementById("cidade").value;
+    
+        // Verifica se há cacifos na cidade selecionada
+        const cacifosNaCidade = cities[cidadeSelecionada]?.cacifos || [];
+        if (cacifosNaCidade.length > 0) {
+            // Usa o primeiro cacifo da lista como padrão
+            const cacifoPadrao = cacifosNaCidade[0];
+    
+            const novaEncomenda = {
+                codigo: "1234",
+                data: new Date().toLocaleDateString(),
+                dataExtenso: new Date().toLocaleDateString('pt-PT', { year: 'numeric', month: 'long', day: 'numeric'}),
+                estado: "Reservado",
+                detalhes: `Tamanho: Não especificado`,
+                cacifo: cacifoPadrao.nome,
+                createdAt: new Date().getTime(),
+            };
+    
+            encomendas.push(novaEncomenda);
+            localStorage.setItem("encomendas", JSON.stringify(encomendas));
+    
+            alert(`Reserva criada e levantamento realizado com sucesso!\nCacifo: ${novaEncomenda.cacifo}\nCódigo: ${novaEncomenda.codigo}`);
+        } else {
+            alert("Nenhum cacifo disponível na cidade selecionada!");
+        }
+    }
+    
+    else {
         alert("Código inválido ou encomenda não encontrada!");
     }
 
