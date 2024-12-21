@@ -163,4 +163,10 @@ const reservarCacifo = (nomeCacifo) => {
         `;
         modalConfirmacao.showModal();
     });
+
+    // Adiciona evento ao botão de validar código
+    document.getElementById("validarCodigo").addEventListener("click", () => {
+        alert("Código validado com sucesso!");
+        modal.hide();
+    });
 };

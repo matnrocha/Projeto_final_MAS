@@ -17,7 +17,9 @@ function generateCountdownTimer(encomenda) {
             let historico = JSON.parse(localStorage.getItem("historico")) || [];
 
             encomendas = encomendas.filter(e => e.codigo !== encomenda.codigo);
-            historico.push(encomenda);
+            if (!historico.some(e => e.codigo === encomenda.codigo)) {
+                historico.push(encomenda);
+            }
 
             localStorage.setItem("encomendas", JSON.stringify(encomendas));
             localStorage.setItem("historico", JSON.stringify(historico));
@@ -34,4 +36,8 @@ function generateCountdownTimer(encomenda) {
         countdownContainer.innerHTML = `${minutes}m ${seconds}s`;
         countdownContainer.style.color = "green";
     }, 1000);
+}
+
+function atualizarHistorico() {
+    let historico = JSON.parse(localStorage.getItem("historico")) || [];
 }

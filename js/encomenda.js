@@ -11,20 +11,11 @@ function atualizarEncomendas() {
     const encomendasList = document.getElementById("encomendas-list");
     const encomendas = JSON.parse(localStorage.getItem("encomendas")) || [];
 
-    // Ordena as encomendas por data de criação (createdAt)
-    encomendas.sort((a, b) => a.createdAt - b.createdAt);
-
     // Limpa a lista antes de renderizar
     encomendasList.innerHTML = "";
 
-    const now = Date.now();
-    const activeEncomendas = encomendas.filter(encomenda => encomenda.createdAt + 3600000 > now); // 1 hour in milliseconds
-    const expiredEncomendas = encomendas.filter(encomenda => encomenda.createdAt + 3600000 <= now);
-
-    // Atualiza o localStorage com as encomendas ativas
-    localStorage.setItem("encomendas", JSON.stringify(activeEncomendas));
-    // Atualiza o localStorage com as encomendas expiradas
-    localStorage.setItem("historico", JSON.stringify(expiredEncomendas));
+    // Filtra as encomendas ativas
+    const activeEncomendas = encomendas.filter(encomenda => encomenda.estado !== "Expirado");
 
     if (activeEncomendas.length === 0) {
         encomendasList.innerHTML = "<p>Você não tem nenhuma encomenda no momento.</p>";

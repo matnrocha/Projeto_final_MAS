@@ -119,7 +119,9 @@ const reservarCacifo = (nomeCacifo) => {
             <button type="button" class="btn btn-success" onclick="document.getElementById('modalConfirmacao').close()">Fechar</button>
         `;
         modalConfirmacao.showModal();
-        bootstrap.Modal.getInstance(document.getElementById("modalEscolha")).hide();
+        if (bootstrap.Modal.getInstance(document.getElementById("modalEscolha"))) {
+            bootstrap.Modal.getInstance(document.getElementById("modalEscolha")).hide();
+        }
     });
 };
 //levantamento
@@ -127,19 +129,21 @@ document.getElementById("confirmarLevantamento").addEventListener("click", () =>
     const codigoInserido = document.getElementById("codigoLevantamentoInput").value.trim();
     let encomendas = JSON.parse(localStorage.getItem("encomendas")) || [];
 
+    // Find the order with the entered code
     let encomendaEncontrada = encomendas.find(encomenda => encomenda.codigo === codigoInserido);
 
+    // Process the entered code before closing the modal
     if (encomendaEncontrada) {
         alert(`Levantamento realizado com sucesso!\nCacifo: ${encomendaEncontrada.cacifo}\nCódigo: ${encomendaEncontrada.codigo}`);
-        // Atualizar o estado para "Levantado"
+        // Update the state to "Levantado"
         encomendaEncontrada.estado = "Levantado";
         localStorage.setItem("encomendas", JSON.stringify(encomendas));
     } else if (codigoInserido === "1234") {
-        // Cria uma encomenda fictícia para o código "1234"
+        // Create a new "dummy" order for code "1234"
         const novaEncomenda = {
             codigo: "1234",
             data: new Date().toLocaleDateString(),
-            dataExtenso: new Date().toLocaleDateString('pt-PT', { year: 'numeric', month: 'long', day: 'numeric'}),
+            dataExtenso: new Date().toLocaleDateString('pt-PT', { year: 'numeric', month: 'long', day: 'numeric' }),
             estado: "Reservado",
             detalhes: `Tamanho: médio`,
             cacifo: "Lisboa Centro",
@@ -150,17 +154,21 @@ document.getElementById("confirmarLevantamento").addEventListener("click", () =>
         localStorage.setItem("encomendas", JSON.stringify(encomendas));
 
         alert(`Reserva criada e levantamento realizado com sucesso!\nCacifo: ${novaEncomenda.cacifo}\nCódigo: ${novaEncomenda.codigo}`);
-        bootstrap.Modal.getInstance(document.getElementById("acao-levantamento")).hide();
     } else {
         alert("Código inválido ou encomenda não encontrada!");
-        bootstrap.Modal.getInstance(document.getElementById("acao-levantamento")).hide();
     }
 
-    // Limpa o campo de entrada após a tentativa
+    // Get the Bootstrap modal instance for "modalEscolha"
+    const modalEscolha = bootstrap.Modal.getInstance(document.getElementById("modalEscolha"));
+    
+    // Close the modal if it's open
+    if (modalEscolha) {
+        modalEscolha.hide();
+    }
+
+    // Clear the input field after the operation
     document.getElementById("codigoLevantamentoInput").value = "";
 });
-
-
 
 // Ação de Nova Encomenda
 document.getElementById("novaEncomenda").addEventListener("click", () => {

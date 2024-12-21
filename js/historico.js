@@ -26,7 +26,7 @@ function atualizarHistorico() {
                     <span style="color: hsl(210, 17%, 25%)">Data:</span> 
                     <span style="font-weight: 500">${encomenda.dataExtenso || "Não disponível"}</span> | 
                     <span style="color: hsl(210, 17%, 25%)">Estado: </span>
-                    <span style="font-weight: 500">${encomenda.estado || "Desconhecido"}</span>
+                    <span style="font-weight: 500">${encomenda.estado || "Expirado"}</span>
                 </p>
                 <p style="margin-bottom:0">
                     <span style="color: hsl(210, 17%, 25%)">Detalhes:</span><br />
