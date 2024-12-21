@@ -8,7 +8,24 @@ document.addEventListener("DOMContentLoaded", function () {
 function atualizarHistorico() {
     console.log("Atualizando histórico de encomendas...");
     const historicoList = document.getElementById("historico-list");
-    const historico = JSON.parse(localStorage.getItem("historico")) || [];
+    
+    // Mockup objects for historico array
+    const historico = JSON.parse(localStorage.getItem("historico")) || [
+        {
+            codigo: "001",
+            dataExtenso: "16 de Dezembro de 2024",
+            estado: "Entregue",
+            detalhes: "Tamanho: médio",
+            cacifo: "Coimbra Centro"
+        },
+        {
+            codigo: "002",
+            dataExtenso: "21 de Dezembro de 2023",
+            estado: "Entregue",
+            detalhes: "Tamanho: pequeno",
+            cacifo: "Porto Gaia"
+        }
+    ];
 
     // Limpa a lista antes de renderizar
     historicoList.innerHTML = "";
